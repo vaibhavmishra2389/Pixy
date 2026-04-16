@@ -37,17 +37,31 @@
   <button onclick="setFilter('none')">Reset</button>
 </div>
 
-<script>
+   <script>
 let img = document.getElementById("preview");
+let canvas = document.createElement("canvas");
+let ctx = canvas.getContext("2d");
 
 document.getElementById("upload").onchange = function(e){
-  img.src = URL.createObjectURL(e.target.files[0]);
-}
+  let file = e.target.files[0];
+  img.src = URL.createObjectURL(file);
+};
 
 function setFilter(f){
   img.style.filter = f;
 }
-</script>
 
-</body>
-</html> 
+// Download with filter applied
+function downloadImage(){
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+
+  ctx.filter = img.style.filter;
+  ctx.drawImage(img, 0, 0);
+
+  let link = document.createElement("a");
+  link.download = "pixy-image.png";
+  link.href = canvas.toDataURL();
+  link.click();
+}
+   </script>  
